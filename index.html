@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sci-Fi Data Access Portal</title>
+    <title>Futuristic Sci-Fi Website</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to the Sci-Fi Data Access Portal</h1>
-        <div id="login-form">
-            <input type="password" id="password" placeholder="Enter Password">
-            <button onclick="validatePassword()">Login</button>
-        </div>
-        <div id="content" style="display: none;">
-            <h2>Secure Data</h2>
-            <p id="data"></p>
-        </div>
-    </div>
+    <header>
+        <h1>Futuristic Sci-Fi Website</h1>
+    </header>
+    <main>
+        <section id="apod-section">
+            <h2>Astronomy Picture of the Day</h2>
+            <div id="apod-content">
+                <p>Loading...</p>
+            </div>
+        </section>
+        <section id="mars-photos-section">
+            <h2>Mars Rover Photos</h2>
+            <div id="mars-photos">
+                <p>Loading...</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Futuristic Sci-Fi Website</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
