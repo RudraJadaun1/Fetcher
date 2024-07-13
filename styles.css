@@ -1,28 +1,39 @@
 /* styles.css */
 body {
-    background-color: black;
-    color: lime;
-    font-family: 'Courier New', Courier, monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    font-family: Arial, sans-serif;
     margin: 0;
+    padding: 0;
+    background-color: #0a0a0a;
+    color: #ffffff;
 }
-.container {
+
+header {
+    background-color: #000000;
+    padding: 10px;
     text-align: center;
 }
-input, button {
+
+header h1 {
+    font-size: 2em;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #00b8ff;
+}
+
+footer {
+    text-align: center;
+    background-color: #000000;
     padding: 10px;
-    margin: 10px;
-    border-radius: 5px;
-    border: none;
-}
-button {
-    background-color: lime;
-    color: black;
-    cursor: pointer;
-}
-#content {
-    margin-top: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
