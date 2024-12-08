@@ -1,48 +1,58 @@
-// script.js
-const apiKey = 'TPTduCA9KpJSf1ECSx2JWR5dEbmQ3XSw5dMM9ofK';
+const apiKey = 'TPTduCA9KpJSf1ECSx2JWR5dEbmQ3XSw5dMM9ofK'; // Your NASA API Key
+const rovers = ['curiosity', 'opportunity', 'spirit']; // Mars rovers
+let currentRoverIndex = 0; // Start with the first rover
+let photoIndex = 0; // Start with the first photo of the current rover
+let photos = []; // Array to store photos for the current rover
 
-// Function to fetch Astronomy Picture of the Day (APOD)
-function fetchAPOD() {
-    fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`)
-        .then(response => response.json())
-        .then(data => {
-            const apodContent = document.getElementById('apod-content');
-            apodContent.innerHTML = `
-                <img src="${data.url}" alt="${data.title}" class="apod-image">
-                <p>${data.explanation}</p>
-            `;
-        })
-        .catch(error => {
-            console.error('Error fetching APOD:', error);
-            const apodContent = document.getElementById('apod-content');
-            apodContent.innerHTML = '<p>Failed to fetch Astronomy Picture of the Day.</p>';
-        });
+// Fetch photos for the current rover
+async function fetchPhotos() {
+    const rover = rovers[currentRoverIndex];
+    try {
+        const response = await fetch(
+            `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=1000&api_key=${apiKey}`
+        );
+        const data = await response.json();
+        if (data.photos.length > 0) {
+            photos = data.photos;
+            photoIndex = 0; // Reset photo index
+            displayPhoto(); // Show the first photo
+        } else {
+            document.getElementById('photo-gallery').innerHTML = `<p>No photos found for ${rover}.</p>`;
+        }
+    } catch (error) {
+        console.error('Error fetching Mars photos:', error);
+        document.getElementById('photo-gallery').innerHTML = `<p>Failed to load photos for ${rover}.</p>`;
+    }
 }
 
-// Function to fetch Mars rover photos
-function fetchMarsPhotos() {
-    fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=${apiKey}`)
-        .then(response => response.json())
-        .then(data => {
-            const marsPhotos = document.getElementById('mars-photos');
-            marsPhotos.innerHTML = '';
-            data.photos.forEach(photo => {
-                const img = document.createElement('img');
-                img.src = photo.img_src;
-                img.alt = `Mars Rover Photo taken on ${photo.earth_date}`;
-                img.classList.add('mars-photo');
-                marsPhotos.appendChild(img);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching Mars photos:', error);
-            const marsPhotos = document.getElementById('mars-photos');
-            marsPhotos.innerHTML = '<p>Failed to fetch Mars rover photos.</p>';
-        });
+// Display the current photo
+function displayPhoto() {
+    if (photos.length > 0) {
+        const photo = photos[photoIndex];
+        const gallery = document.getElementById('photo-gallery');
+        gallery.innerHTML = `
+            <img src="${photo.img_src}" alt="Mars Photo by ${rovers[currentRoverIndex]}" />
+            <p>${rovers[currentRoverIndex].toUpperCase()} Rover - Photo taken on ${photo.earth_date}</p>
+        `;
+    }
 }
 
-// Execute functions when the page loads
-window.onload = function() {
-    fetchAPOD();
-    fetchMarsPhotos();
-};
+// Move to the next photo
+function nextPhoto() {
+    if (photos.length > 0) {
+        photoIndex++;
+        if (photoIndex >= photos.length) {
+            // Switch to the next rover when photos are exhausted
+            currentRoverIndex = (currentRoverIndex + 1) % rovers.length;
+            fetchPhotos(); // Fetch photos for the next rover
+        } else {
+            displayPhoto(); // Display the next photo
+        }
+    }
+}
+
+// Add event listener to the Next Photo button
+document.getElementById('next-photo').addEventListener('click', nextPhoto);
+
+// Fetch the first set of photos on page load
+fetchPhotos();
